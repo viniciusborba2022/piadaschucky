@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piadas do Chuck Norris</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'chucknorris/css/styles.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'chucknorris/images/favicon.png' %}">
+</head>
+<body>
+    <div class="container">
+        <img id="header-image" src="{% static 'chucknorris/images/legal.png' %}" alt="Imagem de Topo">
+        <h1>Piadas do Chuck Norris</h1>
+        <form id="joke-form" method="get">
+            <label for="category">Escolha uma categoria:</label>
+            <select name="category" id="category">
+                <option value="random">Aleatória</option>
+                {% for category in categories %}
+                    <option value="{{ category }}">{{ category }}</option>
+                {% endfor %}
+            </select>
+            <button type="button" id="get-joke-btn">Obter Piada</button>
+        </form>
+        <div class="joke">
+            <h2>Piada:</h2>
+            <p id="joke-text">{{ joke }}</p>
+            <form method="post" action="{% url 'save_favorite' %}">
+                {% csrf_token %}
+                <input type="hidden" name="joke" id="joke-input" value="{{ joke }}">
+                <button type="submit">Salvar como Favorita</button>
+            </form>
+        </div>
+        <div class="favorites">
+            <h2>Piadas Favoritas:</h2>
+            <ul id="favorites-list">
+                {% for favorite in favorites %}
+                    <li>
+                        {{ favorite.joke }}
+                        <button type="button" class="remove-favorite-btn" data-id="{{ favorite.id }}">x</button>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <script src="{% static 'chucknorris/js/scripts.js' %}"></script>
+</body>
+</html>
